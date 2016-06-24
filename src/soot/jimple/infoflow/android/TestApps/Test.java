@@ -18,10 +18,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -49,6 +51,7 @@ import soot.jimple.infoflow.data.Abstraction;
 import soot.jimple.infoflow.data.pathBuilders.DefaultPathBuilderFactory.PathBuilder;
 import soot.jimple.infoflow.handlers.ResultsAvailableHandler;
 import soot.jimple.infoflow.ipc.IIPCManager;
+import soot.jimple.infoflow.option.Option;
 import soot.jimple.infoflow.results.InfoflowResults;
 import soot.jimple.infoflow.results.ResultSinkInfo;
 import soot.jimple.infoflow.results.ResultSourceInfo;
@@ -58,6 +61,7 @@ import soot.jimple.infoflow.taintWrappers.EasyTaintWrapper;
 import soot.jimple.infoflow.taintWrappers.ITaintPropagationWrapper;
 import soot.jimple.infoflow.util.SystemClassHandler;
 import soot.options.Options;
+import soot.toolkits.scalar.Pair;
 
 public class Test {
 	
@@ -108,6 +112,69 @@ public class Test {
 						throw new RuntimeException(ex);
 					}
 				}
+				
+				/**
+				 * @author yifei
+				 * count the results
+				 */
+				int count = 0;
+				for (ResultSinkInfo sink : results.getResults().keySet()) {
+					count += results.getResults().get(sink).size();
+				}
+				System.out.println("Found " + count + " source and sink pairs.");
+				// End of yifei modification
+				
+				/**
+				 * @author yifei
+				 * sort results and output it to file
+				 */
+				List<Pair<String, List<String>>> pairs = new ArrayList<>();
+				for(ResultSinkInfo sink : results.getResults().keySet()) {
+					List<String> sources = new ArrayList<>();
+					pairs.add(new Pair<>("sink " + sink.getSink().toString() + " from following sources: ", sources));
+					for(ResultSourceInfo source : results.getResults().get(sink)) {
+						sources.add(source.getSource() + " in " + cfg.getMethodOf(source.getSource()).getSignature());
+					}
+				}
+				// sort the results
+				for(Pair<String, List<String>> p : pairs) {
+					p.getO2().sort(new Comparator<String>() {
+						@Override
+						public int compare(String o1, String o2) {
+							// TODO Auto-generated method stub
+							return o1.compareTo(o2);
+						}
+					});
+				}
+				pairs.sort(new Comparator<Pair<String, List<String>>>() {
+					@Override
+					public int compare(Pair<String, List<String>> o1,
+							Pair<String, List<String>> o2) {
+						// TODO Auto-generated method stub
+						return o1.getO1().compareTo(o2.getO1());
+					}
+				});
+				String sourceSinkPairFileName = null;
+				if(config.isInferenceReflectionModel())
+					sourceSinkPairFileName = Option.v().getAppName() + "_refl_SourceSinkPair.txt";
+				else
+					sourceSinkPairFileName = Option.v().getAppName() + "_SourceSinkPair.txt";
+				try(PrintWriter writer = new PrintWriter(sourceSinkPairFileName)) {
+					for(Pair<String, List<String>> p : pairs) {
+						StringBuffer buffer = new StringBuffer(p.getO1().toString());
+						buffer.append("\n");
+						for(String source : p.getO2()) {
+							buffer.append("\t");
+							buffer.append(source);
+							buffer.append("\n");
+						}
+						writer.println(buffer.toString());
+					}
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				// end of yifei modification
 			}
 			
 		}
@@ -200,8 +267,18 @@ public class Test {
 					apkFiles.add(line);
 				rdr.close();
 			}
-			else if (extension.equalsIgnoreCase(".apk"))
+			/**
+			 * @author yifei
+			 * Get app name
+			 */
+			else if (extension.equalsIgnoreCase(".apk")) {
 				apkFiles.add(args[0]);
+				// added by yifei
+				String appPath = args[0];
+				String appName = appPath.substring(appPath.lastIndexOf(File.separator) + 1);
+				soot.jimple.infoflow.option.Option.v().setAppName(appName.split(".apk")[0]);
+			}
+			// end of yifei modification
 			else {
 				System.err.println("Invalid input file format: " + extension);
 				return;
@@ -406,6 +483,24 @@ public class Test {
 				config.setMaxThreadNum(Integer.valueOf(args[i+1]));
 				i += 2;
 			}
+			/**
+			 * @author yifei
+			 * configure inference reflection model
+			 */
+			else if(args[i].equalsIgnoreCase("--inferencereflmodel")) {
+				config.setInferenceReflectionModel(true);
+				i++;
+			}
+			// end of yifei modification
+			/**
+			 * @author yifei
+			 * configure whether perform taint analysis
+			 */
+			else if(args[i].equalsIgnoreCase("--cgonly")) {
+				config.setTaintAnalysisEnabled(false);
+				i++;
+			}
+			// end of yifei modification
 			else
 				i++;
 		}
