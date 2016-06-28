@@ -51,7 +51,7 @@ import soot.jimple.infoflow.data.Abstraction;
 import soot.jimple.infoflow.data.pathBuilders.DefaultPathBuilderFactory.PathBuilder;
 import soot.jimple.infoflow.handlers.ResultsAvailableHandler;
 import soot.jimple.infoflow.ipc.IIPCManager;
-import soot.jimple.infoflow.option.Option;
+import soot.jimple.infoflow.reflection.Option;
 import soot.jimple.infoflow.results.InfoflowResults;
 import soot.jimple.infoflow.results.ResultSinkInfo;
 import soot.jimple.infoflow.results.ResultSourceInfo;
@@ -155,7 +155,7 @@ public class Test {
 					}
 				});
 				String sourceSinkPairFileName = null;
-				if(config.isInferenceReflectionModel())
+				if(Option.v().isInferenceReflectionModel())
 					sourceSinkPairFileName = Option.v().getAppName() + "_refl_SourceSinkPair.txt";
 				else
 					sourceSinkPairFileName = Option.v().getAppName() + "_SourceSinkPair.txt";
@@ -276,7 +276,7 @@ public class Test {
 				// added by yifei
 				String appPath = args[0];
 				String appName = appPath.substring(appPath.lastIndexOf(File.separator) + 1);
-				soot.jimple.infoflow.option.Option.v().setAppName(appName.split(".apk")[0]);
+				Option.v().setAppName(appName.split(".apk")[0]);
 			}
 			// end of yifei modification
 			else {
@@ -488,7 +488,11 @@ public class Test {
 			 * configure inference reflection model
 			 */
 			else if(args[i].equalsIgnoreCase("--inferencereflmodel")) {
-				config.setInferenceReflectionModel(true);
+				Option.v().setInferenceReflectionModel(true);
+				i++;
+			}
+			else if(args[i].equalsIgnoreCase("--reflectionlibmodel")) {
+				Option.v().setReflectionLibModel(true);
 				i++;
 			}
 			// end of yifei modification
