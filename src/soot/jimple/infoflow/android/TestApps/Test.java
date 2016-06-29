@@ -60,6 +60,7 @@ import soot.jimple.infoflow.solver.cfg.IInfoflowCFG;
 import soot.jimple.infoflow.taintWrappers.EasyTaintWrapper;
 import soot.jimple.infoflow.taintWrappers.ITaintPropagationWrapper;
 import soot.jimple.infoflow.util.SystemClassHandler;
+import soot.jimple.toolkits.callgraph.reflection.ReflectionOptions;
 import soot.options.Options;
 import soot.toolkits.scalar.Pair;
 
@@ -155,7 +156,7 @@ public class Test {
 					}
 				});
 				String sourceSinkPairFileName = null;
-				if(Option.v().isInferenceReflectionModel())
+				if(ReflectionOptions.v().isInferenceReflectionModel())
 					sourceSinkPairFileName = Option.v().getAppName() + "_refl_SourceSinkPair.txt";
 				else
 					sourceSinkPairFileName = Option.v().getAppName() + "_SourceSinkPair.txt";
@@ -488,11 +489,12 @@ public class Test {
 			 * configure inference reflection model
 			 */
 			else if(args[i].equalsIgnoreCase("--inferencereflmodel")) {
+				// ReflectionOptions.v().setInferenceReflectionModel(true);
 				Option.v().setInferenceReflectionModel(true);
 				i++;
 			}
 			else if(args[i].equalsIgnoreCase("--reflectionlibmodel")) {
-				Option.v().setReflectionLibModel(true);
+				ReflectionOptions.v().setReflectionLibModel(true);
 				i++;
 			}
 			// end of yifei modification

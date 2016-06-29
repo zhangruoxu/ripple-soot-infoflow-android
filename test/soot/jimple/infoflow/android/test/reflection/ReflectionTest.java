@@ -42,6 +42,7 @@ public class ReflectionTest {
 			"C:\\Users\\yifei\\Desktop\\Android project\\apps\\Reflection3\\app\\build\\outputs\\apk\\app-debug.apk",
 			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
 			"--inferencereflmodel",
+			// "--reflectionlibmodel",
 			// "--cgonly",
 			// "--pathalgo",
 			// "contextinsensitive"
@@ -91,11 +92,13 @@ public class ReflectionTest {
 				"C:\\Users\\yifei\\Desktop\\Android project\\apps\\LibraryModeling\\app\\build\\outputs\\apk\\app-debug.apk",
 				"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
 				"--inferencereflmodel",
-				
+				"--reflectionlibmodel",
 			};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
 		SootMethod mainMtd = Scene.v().getMethod("<com.example.yifei.librarymodeling.MainActivity: void onCreate(android.os.Bundle)>");
+		SootMethod reflMtd = Scene.v().getMethod("<com.example.yifei.librarymodeling.MainActivity: java.lang.Object getTelephonyManager()>");
 		queryPTSOfVarInMtd(mainMtd);
+		queryPTSOfVarInMtd(reflMtd);
 		System.out.println(mainMtd.retrieveActiveBody());
 	}
 	
@@ -131,6 +134,7 @@ public class ReflectionTest {
 			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\28_com.netmarble.sknightsgb.apk",
 			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
 			"--inferencereflmodel",
+			"--reflectionlibmodel",
 		};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
 	}
@@ -250,7 +254,8 @@ public class ReflectionTest {
 		String[] args = new String[] {
 			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\202_com.appsorama.kleptocats.apk",
 			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
-			// "--inferencereflmodel"
+			"--inferencereflmodel",
+			"--reflectionlibmodel"
 		};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
 	}
