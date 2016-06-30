@@ -493,10 +493,17 @@ public class Test {
 				Option.v().setInferenceReflectionModel(true);
 				i++;
 			}
-			else if(args[i].equalsIgnoreCase("--reflectionlibmodel")) {
-				ReflectionOptions.v().setReflectionLibModel(true);
+			else if(args[i].equalsIgnoreCase("--libreflretvalmodel")) {
+				ReflectionOptions.v().setLibraryReturnValueModel(true);
 				i++;
+				System.out.println("[InferenceReflectionModel] Library reflective call return value modeling is on.");
 			}
+			else if(args[i].equalsIgnoreCase("--libreflreceivervalmodel")) {
+				ReflectionOptions.v().setLibraryReceiverValueModel(true);
+				i++;
+				System.out.println("[InferenceReflectionModel] Library reflective call Receiver object modeling is on.");
+			}
+			
 			// end of yifei modification
 			/**
 			 * @author yifei

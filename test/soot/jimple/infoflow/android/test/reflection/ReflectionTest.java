@@ -42,7 +42,7 @@ public class ReflectionTest {
 			"C:\\Users\\yifei\\Desktop\\Android project\\apps\\Reflection3\\app\\build\\outputs\\apk\\app-debug.apk",
 			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
 			"--inferencereflmodel",
-			// "--reflectionlibmodel",
+			// "--libreflretvalmodel",
 			// "--cgonly",
 			// "--pathalgo",
 			// "contextinsensitive"
@@ -92,7 +92,8 @@ public class ReflectionTest {
 				"C:\\Users\\yifei\\Desktop\\Android project\\apps\\LibraryModeling\\app\\build\\outputs\\apk\\app-debug.apk",
 				"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
 				"--inferencereflmodel",
-				"--reflectionlibmodel",
+				"--libreflretvalmodel",
+				"--libreflreceivervalmodel",
 			};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
 		SootMethod mainMtd = Scene.v().getMethod("<com.example.yifei.librarymodeling.MainActivity: void onCreate(android.os.Bundle)>");
@@ -119,7 +120,7 @@ public class ReflectionTest {
 		String[] args = new String[] {
 			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\20_com.telstra.mobile.android.mytelstra.apk",
 			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
-			// "--inferencereflmodel",
+			// "--libreflretvalmodel",
 			"--cgonly",
 		};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
@@ -134,7 +135,7 @@ public class ReflectionTest {
 			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\28_com.netmarble.sknightsgb.apk",
 			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
 			"--inferencereflmodel",
-			"--reflectionlibmodel",
+			"--libreflretvalmodel",
 		};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
 	}
@@ -255,7 +256,9 @@ public class ReflectionTest {
 			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\202_com.appsorama.kleptocats.apk",
 			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
 			"--inferencereflmodel",
-			"--reflectionlibmodel"
+			// "--libreflretvalmodel",
+			"--pathalgo",
+			"contextsensitive"
 		};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
 	}
