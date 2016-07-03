@@ -503,6 +503,13 @@ public class Test {
 				i++;
 				System.out.println("[InferenceReflectionModel] Library reflective call Receiver object modeling is on.");
 			}
+			else if(args[i].equalsIgnoreCase("--conststringonly")) {
+				ReflectionOptions.v().setConstStringOnly(true);
+				i++;
+				ReflectionOptions.v().setLibraryReceiverValueModel(false);
+				ReflectionOptions.v().setLibraryReturnValueModel(false);
+				System.out.println("[InferenceReflectionModel] Only constant strings are used to resolve reflective call.");
+			}
 			
 			// end of yifei modification
 			/**

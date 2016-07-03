@@ -1,13 +1,17 @@
 package soot.jimple.infoflow.android.test.reflection;
 
+import java.util.Map;
 import java.util.stream.StreamSupport;
 
 import org.junit.Test;
 
 import soot.Local;
+import soot.PackManager;
 import soot.PointsToAnalysis;
 import soot.Scene;
+import soot.SceneTransformer;
 import soot.SootMethod;
+import soot.Transform;
 import soot.Unit;
 import soot.Value;
 import soot.jimple.AssignStmt;
@@ -103,6 +107,30 @@ public class ReflectionTest {
 		System.out.println(mainMtd.retrieveActiveBody());
 	}
 	
+	public void testSootPack() {
+		PackManager.v().getPack("cg").add(
+			new Transform("cg.yifei", new SceneTransformer() {
+				@Override
+				protected void internalTransform(String phaseName,
+						Map<String, String> options) {
+					// TODO Auto-generated method stub
+					
+				}
+			}));
+	}
+	
+	@Test
+	public void TestApp9() throws Exception {
+		soot.G.reset();
+		String[] args = new String[] {
+			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\9_com.whatsapp.apk",
+			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
+			"--inferencereflmodel",
+			"--cgonly",
+		};
+		soot.jimple.infoflow.android.TestApps.Test.main(args);
+	}
+	
 	@Test
 	public void TestApp10() throws Exception {
 		soot.G.reset();
@@ -136,6 +164,7 @@ public class ReflectionTest {
 			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
 			"--inferencereflmodel",
 			"--libreflretvalmodel",
+			"--libreflreceivervalmodel",
 		};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
 	}
