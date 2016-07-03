@@ -163,6 +163,7 @@ public class ReflectionTest {
 			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\28_com.netmarble.sknightsgb.apk",
 			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
 			"--inferencereflmodel",
+			// "--metaobjmodel",
 			"--libreflretvalmodel",
 			"--libreflreceivervalmodel",
 		};
@@ -174,7 +175,9 @@ public class ReflectionTest {
 		String[] args = new String[] {
 			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\30_com.productmadness.hovmobile.apk",
 			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
-			"--inferencereflmodel"
+//			"--inferencereflmodel",
+//			"--libreflretvalmodel",
+//			"--libreflreceivervalmodel",
 		};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
 	}

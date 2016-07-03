@@ -492,6 +492,11 @@ public class Test {
 				// ReflectionOptions.v().setInferenceReflectionModel(true);
 				Option.v().setInferenceReflectionModel(true);
 				i++;
+			} 
+			else if(args[i].equalsIgnoreCase("--metaobjmodel")) {
+				ReflectionOptions.v().setMetaObjectModel(true);
+				i++;
+				System.out.println("[InferenceReflectionModel] Meta object modeling is on.");
 			}
 			else if(args[i].equalsIgnoreCase("--libreflretvalmodel")) {
 				ReflectionOptions.v().setLibraryReturnValueModel(true);
@@ -508,6 +513,7 @@ public class Test {
 				i++;
 				ReflectionOptions.v().setLibraryReceiverValueModel(false);
 				ReflectionOptions.v().setLibraryReturnValueModel(false);
+				ReflectionOptions.v().setMetaObjectModel(false);
 				System.out.println("[InferenceReflectionModel] Only constant strings are used to resolve reflective call.");
 			}
 			
