@@ -324,7 +324,11 @@ public class ReflectionTest {
 		String[] args = new String[] {
 			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\296_air.com.tutotoons.app.animalhairsalon2jungle.free.apk",
 			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
-			"--inferencereflmodel"
+			"--inferencereflmodel",
+			"--metaobjmodel",
+			"--libreflretvalmodel",
+			"--libreflreceivervalmodel",
+			
 		};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
 	}	

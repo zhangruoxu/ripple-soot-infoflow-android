@@ -492,7 +492,11 @@ public class Test {
 				// ReflectionOptions.v().setInferenceReflectionModel(true);
 				Option.v().setInferenceReflectionModel(true);
 				i++;
-			} 
+			} else if(args[i].equalsIgnoreCase("--android")) {
+				ReflectionOptions.v().setAndroid(true);
+				i++;
+				System.out.println("[InferenceReflectionModel] Use Android reflection resolution manner.");
+			}
 			else if(args[i].equalsIgnoreCase("--metaobjmodel")) {
 				ReflectionOptions.v().setMetaObjectModel(true);
 				i++;
