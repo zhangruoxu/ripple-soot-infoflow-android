@@ -122,7 +122,7 @@ public class Test {
 				for (ResultSinkInfo sink : results.getResults().keySet()) {
 					count += results.getResults().get(sink).size();
 				}
-				System.out.println("Found " + count + " source and sink pairs.");
+				System.out.println("# Found " + count + " source and sink pairs.");
 				// End of yifei modification
 				
 				/**

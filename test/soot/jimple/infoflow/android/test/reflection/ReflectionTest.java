@@ -6,12 +6,9 @@ import java.util.stream.StreamSupport;
 import org.junit.Test;
 
 import soot.Local;
-import soot.PackManager;
 import soot.PointsToAnalysis;
 import soot.Scene;
-import soot.SceneTransformer;
 import soot.SootMethod;
-import soot.Transform;
 import soot.Unit;
 import soot.Value;
 import soot.jimple.AssignStmt;
@@ -24,6 +21,7 @@ import soot.jimple.spark.pag.Node;
 import soot.jimple.spark.pag.StringConstantNode;
 import soot.jimple.spark.sets.P2SetVisitor;
 import soot.jimple.spark.sets.PointsToSetInternal;
+import soot.jimple.toolkits.callgraph.Edge;
 
 public class ReflectionTest {
 	@Test
@@ -45,15 +43,21 @@ public class ReflectionTest {
 		String[] args = new String[] {
 			"C:\\Users\\yifei\\Desktop\\Android project\\apps\\Reflection3\\app\\build\\outputs\\apk\\app-debug.apk",
 			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
+			"--android",
 			"--inferencereflmodel",
-			// "--libreflretvalmodel",
+			"--metaobjmodel",
+			"--libreflretvalmodel",
 			// "--cgonly",
 			// "--pathalgo",
 			// "contextinsensitive"
 		};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
-		System.out.println(Scene.v().getCallGraph());
 		SootMethod mainMtd = Scene.v().getMethod("<de.ecspride.MainActivity: void onCreate(android.os.Bundle)>");
+		System.out.println("CG: ");
+		StreamSupport.stream(Scene.v().getCallGraph().spliterator(), false)
+					 .map(Edge::toString)
+					 .sorted()
+					 .forEach(System.out::println);
 		queryPTSOfVarInMtd(mainMtd);
 		System.out.println(mainMtd.retrieveActiveBody());
 		StreamSupport.stream(Scene.v().getCallGraph().spliterator(), false)
@@ -95,6 +99,7 @@ public class ReflectionTest {
 		String[] args = new String[] {
 				"C:\\Users\\yifei\\Desktop\\Android project\\apps\\LibraryModeling\\app\\build\\outputs\\apk\\app-debug.apk",
 				"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
+				"--android",
 				"--inferencereflmodel",
 				"--libreflretvalmodel",
 				"--libreflreceivervalmodel",
@@ -104,19 +109,9 @@ public class ReflectionTest {
 		SootMethod reflMtd = Scene.v().getMethod("<com.example.yifei.librarymodeling.MainActivity: java.lang.Object getTelephonyManager()>");
 		queryPTSOfVarInMtd(mainMtd);
 		queryPTSOfVarInMtd(reflMtd);
+		System.out.println("CG:");
+		System.out.println(Scene.v().getCallGraph());
 		System.out.println(mainMtd.retrieveActiveBody());
-	}
-	
-	public void testSootPack() {
-		PackManager.v().getPack("cg").add(
-			new Transform("cg.yifei", new SceneTransformer() {
-				@Override
-				protected void internalTransform(String phaseName,
-						Map<String, String> options) {
-					// TODO Auto-generated method stub
-					
-				}
-			}));
 	}
 	
 	@Test
@@ -162,10 +157,12 @@ public class ReflectionTest {
 		String[] args = new String[] {
 			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\28_com.netmarble.sknightsgb.apk",
 			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
+			"--android",
 			"--inferencereflmodel",
-			// "--metaobjmodel",
+			"--metaobjmodel",
 			"--libreflretvalmodel",
 			"--libreflreceivervalmodel",
+			// "--conststringonly",
 		};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
 	}
@@ -232,6 +229,18 @@ public class ReflectionTest {
 		String[] args = new String[] {
 			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\140_com.thecarousell.Carousell.apk",
 			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
+			"--inferencereflmodel"
+		};
+		soot.jimple.infoflow.android.TestApps.Test.main(args);
+	}
+	
+	@Test
+	public void TestApp150() throws Exception {
+		soot.G.reset();
+		String[] args = new String[] {
+			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\150_com.bigduckgames.flow.apk",
+			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
+			"--android",
 			"--inferencereflmodel"
 		};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
