@@ -1,5 +1,6 @@
 package soot.jimple.infoflow.android.test.reflection;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.stream.StreamSupport;
 
@@ -17,13 +18,31 @@ import soot.jimple.InvokeStmt;
 import soot.jimple.NullConstant;
 import soot.jimple.StaticInvokeExpr;
 import soot.jimple.VirtualInvokeExpr;
+import soot.jimple.spark.pag.AllocNode;
 import soot.jimple.spark.pag.Node;
 import soot.jimple.spark.pag.StringConstantNode;
 import soot.jimple.spark.sets.P2SetVisitor;
 import soot.jimple.spark.sets.PointsToSetInternal;
+import soot.jimple.toolkits.callgraph.CallGraph;
 import soot.jimple.toolkits.callgraph.Edge;
 
 public class ReflectionTest {
+	@Test
+	public void TestTest() throws Exception {
+		soot.G.reset();
+		String[] args = new String[] {
+				"C:\\Users\\yifei\\Desktop\\Android project\\apps\\Test\\app\\build\\outputs\\apk\\app-debug.apk",
+				"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
+				"--android",
+				"--inferencereflmodel",
+				"--metaobjmodel",
+		};
+		soot.jimple.infoflow.android.TestApps.Test.main(args);
+		System.out.println(Scene.v().getCallGraph());
+		SootMethod mainMtd = Scene.v().getMethod("<com.example.yifei.test.MainActivity: void onCreate(android.os.Bundle)>");
+		queryPTSOfVarInMtd(mainMtd);
+	}
+	
 	@Test
 	public void TestDroidbenchRefl4() throws Exception {
 		soot.G.reset();
@@ -47,9 +66,8 @@ public class ReflectionTest {
 			"--inferencereflmodel",
 			"--metaobjmodel",
 			"--libreflretvalmodel",
-			// "--cgonly",
-			// "--pathalgo",
-			// "contextinsensitive"
+			 "--pathalgo",
+			 "contextsensitive",
 		};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
 		SootMethod mainMtd = Scene.v().getMethod("<de.ecspride.MainActivity: void onCreate(android.os.Bundle)>");
@@ -58,8 +76,8 @@ public class ReflectionTest {
 					 .map(Edge::toString)
 					 .sorted()
 					 .forEach(System.out::println);
-		queryPTSOfVarInMtd(mainMtd);
 		System.out.println(mainMtd.retrieveActiveBody());
+		queryPTSOfVarInMtd(mainMtd);
 		StreamSupport.stream(Scene.v().getCallGraph().spliterator(), false)
 					 .filter(e -> e.src().equals(mainMtd))
 					 .forEach(System.out::println);
@@ -102,7 +120,9 @@ public class ReflectionTest {
 				"--android",
 				"--inferencereflmodel",
 				"--libreflretvalmodel",
-				"--libreflreceivervalmodel",
+				// "--libreflreceivervalmodel",
+				"--pathalgo",
+				"contextsensitive",
 			};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
 		SootMethod mainMtd = Scene.v().getMethod("<com.example.yifei.librarymodeling.MainActivity: void onCreate(android.os.Bundle)>");
@@ -112,6 +132,20 @@ public class ReflectionTest {
 		System.out.println("CG:");
 		System.out.println(Scene.v().getCallGraph());
 		System.out.println(mainMtd.retrieveActiveBody());
+	}
+	
+	@Test
+	public void TestApp1() throws Exception {
+		soot.G.reset();
+		String[] args = new String[] {
+			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\1_com.facebook.orca.apk",
+			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
+			"--android",
+			"--inferencereflmodel",
+			"--libreflretvalmodel",
+			"--libreflreceivervalmodel",
+		};
+		soot.jimple.infoflow.android.TestApps.Test.main(args);
 	}
 	
 	@Test
@@ -202,6 +236,17 @@ public class ReflectionTest {
 	}
 	
 	@Test
+	public void TestApp79() throws Exception {
+		soot.G.reset();
+		String[] args = new String[] {
+			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\79_com.jb.gosms.apk",
+			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
+			"--inferencereflmodel"
+		};
+		soot.jimple.infoflow.android.TestApps.Test.main(args);
+	}
+	
+	@Test
 	public void TestApp93() throws Exception {
 		soot.G.reset();
 		String[] args = new String[] {
@@ -224,6 +269,27 @@ public class ReflectionTest {
 	}
 	
 	@Test
+	public void TestApp134() throws Exception {
+		soot.G.reset();
+		String[] args = new String[] {
+			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\134_com.ea.game.pvzfree_row.apk",
+			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
+			"--android",
+			"--inferencereflmodel",
+			"--metaobjmodel",
+			"--cgonly",
+		};
+		soot.jimple.infoflow.android.TestApps.Test.main(args);
+		CallGraph cg = Scene.v().getCallGraph();
+		for(Edge e : cg) {
+			if(e.tgt().getName().equals("startActivity")) {
+				System.out.println("## " + e.src());
+				System.out.println(e.src().retrieveActiveBody());
+			}
+		}
+	}
+	
+	@Test
 	public void TestApp140() throws Exception {
 		soot.G.reset();
 		String[] args = new String[] {
@@ -241,7 +307,11 @@ public class ReflectionTest {
 			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\150_com.bigduckgames.flow.apk",
 			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
 			"--android",
-			"--inferencereflmodel"
+			"--inferencereflmodel",
+//			"--metaobjmodel",
+			"--libreflretvalmodel",
+			"--libreflreceivervalmodel",
+			
 		};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
 	}
@@ -274,9 +344,30 @@ public class ReflectionTest {
 		String[] args = new String[] {
 			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\178_com.imangi.templerun.apk",
 			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
+			"--android",
 			"--inferencereflmodel"
 		};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
+	}
+	
+	@Test
+	public void TestApp185() throws Exception {
+		soot.G.reset();
+		String[] args = new String[] {
+			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\185_com.rovio.angrybirds.apk",
+			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
+			"--android",
+			"--inferencereflmodel",
+			"--metaobjmodel",
+			"--libreflretvalmodel",
+			"--libreflreceivervalmodel",
+		};
+		soot.jimple.infoflow.android.TestApps.Test.main(args);
+		find(Scene.v().getCallGraph());
+	}
+	
+	public void find(CallGraph cg) {
+		
 	}
 	
 	@Test
@@ -296,10 +387,12 @@ public class ReflectionTest {
 		String[] args = new String[] {
 			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\202_com.appsorama.kleptocats.apk",
 			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
+			"--android",
 			"--inferencereflmodel",
+			"--metaobjmodel",
+//			"--libreflretvalmodel",
+//			"--libreflreceivervalmodel",
 			// "--libreflretvalmodel",
-			"--pathalgo",
-			"contextsensitive"
 		};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
 	}
@@ -410,6 +503,10 @@ public class ReflectionTest {
 			@Override
 			public void visit(Node n) {
 				System.out.println("# Node type: " + n.getClass().getName());
+				if(n instanceof AllocNode) {
+					AllocNode allocNode = (AllocNode) n;
+					System.out.println("# AllocNode " + allocNode.toString());
+				}
 				if(n instanceof StringConstantNode) {
 					StringConstantNode scNode = (StringConstantNode) n;
 					System.out.println("# String constant node " + scNode.getString());

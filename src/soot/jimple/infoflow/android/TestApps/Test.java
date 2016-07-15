@@ -132,7 +132,7 @@ public class Test {
 				List<Pair<String, List<String>>> pairs = new ArrayList<>();
 				for(ResultSinkInfo sink : results.getResults().keySet()) {
 					List<String> sources = new ArrayList<>();
-					pairs.add(new Pair<>("sink " + sink.getSink().toString() + " from following sources: ", sources));
+					pairs.add(new Pair<>("sink " + sink.getSink().toString() + " in " + cfg.getMethodOf(sink.getSink()) + " from following sources: ", sources));
 					for(ResultSourceInfo source : results.getResults().get(sink)) {
 						sources.add(source.getSource() + " in " + cfg.getMethodOf(source.getSource()).getSignature());
 					}
@@ -278,6 +278,7 @@ public class Test {
 				String appPath = args[0];
 				String appName = appPath.substring(appPath.lastIndexOf(File.separator) + 1);
 				Option.v().setAppName(appName.split(".apk")[0]);
+				System.out.println("Analyzing app " + appName);
 			}
 			// end of yifei modification
 			else {
