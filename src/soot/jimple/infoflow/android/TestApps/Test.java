@@ -61,6 +61,7 @@ import soot.jimple.infoflow.taintWrappers.EasyTaintWrapper;
 import soot.jimple.infoflow.taintWrappers.ITaintPropagationWrapper;
 import soot.jimple.infoflow.util.SystemClassHandler;
 import soot.jimple.toolkits.callgraph.reflection.ReflectionOptions;
+import soot.jimple.toolkits.callgraph.reflection.ReflectionStat;
 import soot.options.Options;
 import soot.toolkits.scalar.Pair;
 
@@ -322,6 +323,7 @@ public class Test {
 			
 			System.gc();
 		}
+		ReflectionStat.v().showInferenceReflectionStat();
 	}
 
 	/**

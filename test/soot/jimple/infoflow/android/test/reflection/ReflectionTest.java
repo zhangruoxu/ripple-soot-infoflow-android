@@ -1,7 +1,5 @@
 package soot.jimple.infoflow.android.test.reflection;
 
-import java.io.IOException;
-import java.util.Map;
 import java.util.stream.StreamSupport;
 
 import org.junit.Test;
@@ -47,8 +45,10 @@ public class ReflectionTest {
 	public void TestDroidbenchRefl4() throws Exception {
 		soot.G.reset();
 		String[] args = new String[] {
-				"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\DroidBench-master\\apk\\Reflection\\Reflection4.apk",
-			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms"
+			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\DroidBench-master\\apk\\Reflection\\Reflection4.apk",
+			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
+			"--android",
+			"--inferencereflmodel",
 		};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
 		System.out.println(Scene.v().getCallGraph());
@@ -258,6 +258,20 @@ public class ReflectionTest {
 	}
 	
 	@Test
+	public void TestApp96() throws Exception {
+		soot.G.reset();
+		String[] args = new String[] {
+			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\96_com.bitmango.rolltheballunrollme.apk",
+			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
+			"--android",
+			"--inferencereflmodel",
+			"--metaobjmodel",
+			"--cgonly",
+		};
+		soot.jimple.infoflow.android.TestApps.Test.main(args);
+	}
+	
+	@Test
 	public void TestApp99() throws Exception {
 		soot.G.reset();
 		String[] args = new String[] {
@@ -275,8 +289,9 @@ public class ReflectionTest {
 			"C:\\Users\\yifei\\Desktop\\share\\GooglePlayCrawler\\apps\\134_com.ea.game.pvzfree_row.apk",
 			"C:\\Users\\yifei\\Desktop\\Research\\ICSE17\\libs\\Android\\platforms",
 			"--android",
-			"--inferencereflmodel",
-			"--metaobjmodel",
+			// "--inferencereflmodel",
+			"--conststringonly",
+			// "--metaobjmodel",
 			"--cgonly",
 		};
 		soot.jimple.infoflow.android.TestApps.Test.main(args);
