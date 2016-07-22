@@ -534,6 +534,10 @@ public class Test {
 				i++;
 			}
 			// end of yifei modification
+			else if (args[i].equalsIgnoreCase("--arraysizetainting")) {
+				config.setEnableArraySizeTainting(true);
+				i++;
+			}
 			else
 				i++;
 		}
@@ -632,7 +636,8 @@ public class Test {
 				InfoflowAndroidConfiguration.getUseThisChainReduction() ? "" : "--safemode",
 				config.getLogSourcesAndSinks() ? "--logsourcesandsinks" : "",
 				"--callbackanalyzer", callbackAlgorithmToString(config.getCallbackAnalyzer()),
-				"--maxthreadnum", Integer.toString(config.getMaxThreadNum())
+				"--maxthreadnum", Integer.toString(config.getMaxThreadNum()),
+				config.getEnableArraySizeTainting() ? "--arraysizetainting" : ""
 				};
 		System.out.println("Running command: " + executable + " " + Arrays.toString(command));
 		try {
@@ -799,13 +804,14 @@ public class Test {
 	private static ITaintPropagationWrapper createLibrarySummaryTW()
 			throws IOException {
 		try {
-			Class clzLazySummary = Class.forName("soot.jimple.infoflow.methodSummary.data.summary.LazySummary");
+			Class clzLazySummary = Class.forName("soot.jimple.infoflow.methodSummary.data.provider.LazySummaryProvider");
+			Class itfLazySummary = Class.forName("soot.jimple.infoflow.methodSummary.data.provider.IMethodSummaryProvider");
 			
 			Object lazySummary = clzLazySummary.getConstructor(File.class).newInstance(new File(summaryPath));
 			
 			ITaintPropagationWrapper summaryWrapper = (ITaintPropagationWrapper) Class.forName
 					("soot.jimple.infoflow.methodSummary.taintWrappers.SummaryTaintWrapper").getConstructor
-					(clzLazySummary).newInstance(lazySummary);
+					(itfLazySummary).newInstance(lazySummary);
 			
 			ITaintPropagationWrapper systemClassWrapper = new ITaintPropagationWrapper() {
 				
