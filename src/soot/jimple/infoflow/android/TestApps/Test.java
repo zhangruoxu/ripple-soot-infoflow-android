@@ -279,7 +279,7 @@ public class Test {
 				String appPath = args[0];
 				String appName = appPath.substring(appPath.lastIndexOf(File.separator) + 1);
 				Option.v().setAppName(appName.split(".apk")[0]);
-				System.out.println("Analyzing app " + appName);
+				System.out.println("# Analyzing app " + appName);
 			}
 			// end of yifei modification
 			else {
@@ -495,8 +495,12 @@ public class Test {
 				// ReflectionOptions.v().setInferenceReflectionModel(true);
 				Option.v().setInferenceReflectionModel(true);
 				i++;
+			} else if(args[i].equalsIgnoreCase("--flowdroid")) {
+				ReflectionOptions.v().setForFlowDroid(true);
+				i++;
+				System.out.println("[InferenceReflectionModel] For FlowDroid.");
 			} else if(args[i].equalsIgnoreCase("--android")) {
-				ReflectionOptions.v().setAndroid(true);
+				ReflectionOptions.v().setIsAndroid(true);
 				i++;
 				System.out.println("[InferenceReflectionModel] Use Android reflection resolution manner.");
 			}
